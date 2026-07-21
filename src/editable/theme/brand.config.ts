@@ -5,6 +5,7 @@ import { getProductKind } from '@/design/factory/get-product-kind'
 const { recipe } = getFactoryState()
 const productKind = getProductKind(recipe)
 
+// Meridian-inspired warm palette: dark ink + cream page + amber accent.
 export const slot4BrandConfig = {
   siteName: siteIdentity.name,
   tagline: siteIdentity.tagline,
@@ -13,7 +14,7 @@ export const slot4BrandConfig = {
   productKind,
   ogImage: siteIdentity.ogImage,
   accents: {
-    primary: '#d32323',
-    surface: '#ffffff',
+    primary: '#fcaa2d',
+    surface: '#f3ebe4',
   },
 } as const
