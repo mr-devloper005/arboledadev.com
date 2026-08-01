@@ -244,30 +244,6 @@ function BookmarkDetail({ post, related }: { post: SitePost; related: SitePost[]
           </article>
 
           <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
-            <EditableReveal>
-              <div className="rounded-[var(--tk-radius)] border border-[var(--tk-line)] bg-[var(--tk-surface)] p-6">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-[6px] bg-[var(--tk-accent-soft)] text-[var(--tk-accent)]">
-                    <Bookmark className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-[var(--tk-muted)]">The find</p>
-                    <p className="editable-display text-lg font-medium leading-tight tracking-[-0.02em]">{post.title}</p>
-                  </div>
-                </div>
-                {domain ? (
-                  <p className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-[var(--tk-muted)]">
-                    <Globe className="h-4 w-4 text-[var(--tk-accent)]" /> {domain}
-                  </p>
-                ) : null}
-                {website ? (
-                  <Link href={website} target="_blank" rel="noreferrer" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-[6px] border border-[var(--tk-accent)] bg-[var(--tk-accent)] px-5 py-3 text-sm font-medium text-[var(--tk-on-accent)] transition duration-300 hover:brightness-[0.96]">
-                    Visit resource <ExternalLink className="h-4 w-4" />
-                  </Link>
-                ) : null}
-              </div>
-            </EditableReveal>
-
             <EditableReveal index={1}>
               <div className="rounded-[var(--tk-radius)] border border-[var(--tk-line)] bg-[var(--tk-surface)] p-6">
                 <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-[var(--tk-muted)]">Trust panel</p>
