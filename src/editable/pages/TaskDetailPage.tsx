@@ -401,20 +401,6 @@ function ProfileDetail({ post }: { post: SitePost }) {
               </EditableReveal>
             ) : null}
 
-            {/* Contact / links rows */}
-            {(website || email || phone || twitter) ? (
-              <EditableReveal index={1}>
-                <div className="border-y border-[var(--tk-line)] py-8">
-                  <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-[var(--tk-muted)]">Contact & links</p>
-                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                    {website ? <ContactRow icon={Globe2} label="Website" value={cleanDomain(website)} href={website} /> : null}
-                    {email ? <ContactRow icon={Mail} label="Email" value={email} href={`mailto:${email}`} /> : null}
-                    {phone ? <ContactRow icon={Phone} label="Phone" value={phone} href={`tel:${phone}`} /> : null}
-                    {twitter ? <ContactRow icon={Twitter} label="Twitter" value={`@${twitter.replace(/^@/, '')}`} href={`https://twitter.com/${twitter.replace(/^@/, '')}`} /> : null}
-                  </div>
-                </div>
-              </EditableReveal>
-            ) : null}
 
           </article>
 
