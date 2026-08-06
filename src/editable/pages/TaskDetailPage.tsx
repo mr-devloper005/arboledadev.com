@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {
-  ArrowLeft, ArrowUpRight, Bookmark, CheckCircle2, Download, ExternalLink, FileText, FolderOpen,
+  ArrowLeft, ArrowUpRight, CheckCircle2, Download, ExternalLink, FileText, FolderOpen,
   Globe, Globe2, Mail, MapPin, Phone, Shield, Tag, Twitter, Link as LinkIcon, UserRound,
 } from 'lucide-react'
 import { buildPostMetadata, buildTaskMetadata } from '@/lib/seo'
@@ -158,10 +158,8 @@ function BackLink({ task }: { task: TaskKey }) {
 }
 
 /* =============================================================
-   Bookmark / Resource detail — public hero + sticky action rail
-   No hero image, no date. Domain chip + Visit resource CTA sit
-   next to the display h1; body uses display headings; sidebar
-   contains resource card + trust panel + one sidebar ad.
+   Bookmark / Resource detail — two-column hero (title left,
+   action card right), clean body prose, related strip below.
    ============================================================= */
 function BookmarkDetail({ post, related }: { post: SitePost; related: SitePost[] }) {
   const website = getField(post, ['website', 'url', 'link'])
@@ -172,90 +170,94 @@ function BookmarkDetail({ post, related }: { post: SitePost; related: SitePost[]
 
   return (
     <>
-      {/* Premium hero band — cream ground, oversized display, no imagery. */}
-      <section className="relative border-b border-[var(--tk-line)]">
-        <div className="pointer-events-none absolute inset-x-0 -top-40 h-[520px] bg-[radial-gradient(60%_60%_at_50%_0%,var(--tk-glow),transparent_72%)]" />
-        <div className="relative mx-auto max-w-[var(--editable-container)] px-5 pt-14 pb-[var(--pad-large)] sm:px-8 sm:pt-20 lg:px-12">
+      {/* Two-column hero */}
+      <section className="relative overflow-hidden border-b border-[var(--tk-line)]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(65%_90%_at_15%_0%,var(--tk-glow),transparent_65%)]" />
+        <div className="relative mx-auto max-w-[var(--editable-container)] px-5 pt-12 sm:px-8 lg:px-12">
           <EditableReveal><BackLink task="sbm" /></EditableReveal>
 
-          <EditableReveal index={1}>
-            <div className="mt-10"><Kicker task="sbm">{collection}</Kicker></div>
-          </EditableReveal>
-
-          <EditableReveal index={2}>
-            <h1 className="editable-display mt-6 max-w-4xl text-balance text-[2.5rem] font-medium leading-[1.02] tracking-[-0.03em] sm:text-[3.5rem] lg:text-[4.25rem]">
-              {post.title}<span className="text-[var(--tk-accent)]">.</span>
-            </h1>
-          </EditableReveal>
-
-          {leadText(post) ? (
-            <EditableReveal index={3}>
-              <p className="mt-8 max-w-2xl text-lg leading-[1.6] text-[var(--tk-muted)]">{leadText(post)}</p>
-            </EditableReveal>
-          ) : null}
-
-          <EditableReveal index={4}>
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              {domain ? (
-                <span className="inline-flex items-center gap-2 rounded-[6px] border border-[var(--tk-line)] bg-[var(--tk-surface)] px-4 py-2.5 text-sm font-medium text-[var(--tk-text)]">
-                  <Globe className="h-4 w-4 text-[var(--tk-accent)]" /> {domain}
-                </span>
-              ) : null}
-              {website ? (
-                <Link href={website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-[6px] border border-[var(--tk-accent)] bg-[var(--tk-accent)] px-5 py-2.5 text-sm font-medium text-[var(--tk-on-accent)] transition duration-300 hover:brightness-[0.96]">
-                  Visit resource <ExternalLink className="h-4 w-4" />
-                </Link>
-              ) : null}
-            </div>
-          </EditableReveal>
-
-          {/* Quick-facts strip — Collection · Verified */}
-          <EditableReveal index={5}>
-            <dl className="mt-14 grid gap-6 border-t border-[var(--tk-line)] pt-10 sm:grid-cols-2">
-              <QuickFact label="Collection" value={collection} icon={FolderOpen} />
-              <QuickFact label="Trust" value={verified ? 'Verified' : 'Community-added'} icon={Shield} />
-            </dl>
-          </EditableReveal>
-        </div>
-      </section>
-
-      {/* Body + sidebar */}
-      <section className="mx-auto max-w-[var(--editable-container)] px-5 py-[var(--pad-large)] sm:px-8 lg:px-12">
-        <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <article className="min-w-0">
-            <EditableReveal>
-              <BodyContent post={post} />
-            </EditableReveal>
-
-            {tags.length ? (
+          <div className="mt-10 grid items-start gap-10 pb-16 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-14 lg:pb-20">
+            {/* Left — identity */}
+            <div>
               <EditableReveal index={1}>
-                <div className="mt-12 border-t border-[var(--tk-line)] pt-8">
-                  <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-[var(--tk-muted)]">Tags</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {tags.map((tag) => (
-                      <Link key={tag} href={`/search?q=${encodeURIComponent(tag)}`} className="inline-flex items-center gap-1.5 rounded-[6px] border border-[var(--tk-line)] bg-[var(--tk-surface)] px-3 py-1.5 text-xs font-medium text-[var(--tk-muted)] transition duration-300 hover:border-[var(--tk-accent)] hover:text-[var(--tk-text)]">
-                        <Tag className="h-3 w-3" /> {tag}
-                      </Link>
-                    ))}
-                  </div>
+                <Kicker task="sbm">{collection}</Kicker>
+              </EditableReveal>
+
+              <EditableReveal index={2}>
+                <h1 className="editable-display mt-6 text-balance text-[2.4rem] font-medium leading-[1.02] tracking-[-0.03em] sm:text-[3.2rem] lg:text-[3.8rem]">
+                  {post.title}<span className="text-[var(--tk-accent)]">.</span>
+                </h1>
+              </EditableReveal>
+
+              {leadText(post) ? (
+                <EditableReveal index={3}>
+                  <p className="mt-6 max-w-xl text-lg leading-[1.65] text-[var(--tk-muted)]">{leadText(post)}</p>
+                </EditableReveal>
+              ) : null}
+
+              <EditableReveal index={4}>
+                <div className="mt-8 flex flex-wrap items-center gap-2.5">
+                  {domain ? (
+                    <span className="inline-flex items-center gap-2 rounded-full border border-[var(--tk-line)] bg-[var(--tk-surface)] px-4 py-2 text-sm font-medium text-[var(--tk-text)]">
+                      <Globe className="h-3.5 w-3.5 text-[var(--tk-accent)]" /> {domain}
+                    </span>
+                  ) : null}
+                  <span className="inline-flex items-center gap-2 rounded-full border border-[var(--tk-line)] bg-[var(--tk-surface)] px-4 py-2 text-sm font-medium text-[var(--tk-muted)]">
+                    <FolderOpen className="h-3.5 w-3.5 text-[var(--tk-accent)]" /> {collection}
+                  </span>
+                  {verified ? (
+                    <span className="inline-flex items-center gap-2 rounded-full border border-[var(--tk-accent)] bg-[var(--tk-accent-soft)] px-4 py-2 text-sm font-medium text-[var(--tk-accent)]">
+                      <CheckCircle2 className="h-3.5 w-3.5" /> Verified
+                    </span>
+                  ) : null}
                 </div>
               </EditableReveal>
-            ) : null}
-          </article>
+            </div>
 
-          <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
-            <EditableReveal index={1}>
-              <div className="rounded-[var(--tk-radius)] border border-[var(--tk-line)] bg-[var(--tk-surface)] p-6">
-                <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-[var(--tk-muted)]">Trust panel</p>
-                <ul className="mt-5 space-y-3 text-sm text-[var(--tk-text)]">
+            {/* Right — action card */}
+            <EditableReveal index={3}>
+              <div className="rounded-[var(--tk-radius)] border border-[var(--tk-line)] bg-[var(--tk-surface)] p-7 shadow-[0_6px_32px_rgba(24,19,18,0.08)] lg:sticky lg:top-24">
+                <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-[var(--tk-muted)]">Resource</p>
+                {domain ? (
+                  <p className="mt-3 flex items-center gap-2 truncate text-base font-medium text-[var(--tk-text)]">
+                    <Globe2 className="h-4 w-4 shrink-0 text-[var(--tk-accent)]" /> {domain}
+                  </p>
+                ) : null}
+                {website ? (
+                  <Link href={website} target="_blank" rel="noreferrer" className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[6px] bg-[var(--tk-accent)] px-5 py-3 text-sm font-semibold text-[var(--tk-on-accent)] transition duration-300 hover:brightness-[0.94]">
+                    Visit resource <ExternalLink className="h-4 w-4" />
+                  </Link>
+                ) : null}
+                <ul className="mt-6 space-y-3 border-t border-[var(--tk-line)] pt-6">
                   <TrustRow icon={CheckCircle2} label="Human-curated" note="A person added it, not a script." />
                   <TrustRow icon={Shield} label={verified ? 'Verified link' : 'Live link'} note="Checked recently for reachability." />
                   <TrustRow icon={FolderOpen} label={`Filed under ${collection}`} note="Grouped by theme, not by algorithm." />
                 </ul>
               </div>
             </EditableReveal>
+          </div>
+        </div>
+      </section>
 
-            <EditableReveal index={2}>
+      {/* Body + slim sidebar */}
+      <section className="mx-auto max-w-[var(--editable-container)] px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+        <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <article className="min-w-0">
+            <EditableReveal>
+              <BodyContent post={post} />
+            </EditableReveal>
+
+          </article>
+
+          <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
+            {website ? (
+              <EditableReveal>
+                <Link href={website} target="_blank" rel="noreferrer" className="inline-flex w-full items-center justify-center gap-2 rounded-[6px] border border-[var(--tk-accent)] bg-[var(--tk-accent)] px-5 py-3 text-sm font-semibold text-[var(--tk-on-accent)] transition duration-300 hover:brightness-[0.94]">
+                  Visit resource <ExternalLink className="h-4 w-4" />
+                </Link>
+              </EditableReveal>
+            ) : null}
+            <EditableReveal index={1}>
               <Ads slot="sidebar" size={pickRandom(getSlotSizes('sidebar'))} showLabel className="mx-auto w-full" />
             </EditableReveal>
           </aside>
@@ -289,16 +291,6 @@ function BookmarkDetail({ post, related }: { post: SitePost; related: SitePost[]
   )
 }
 
-function QuickFact({ label, value, icon: Icon }: { label: string; value: string; icon: typeof FolderOpen }) {
-  return (
-    <div>
-      <dt className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[var(--tk-muted)]">
-        <Icon className="h-3.5 w-3.5 text-[var(--tk-accent)]" /> {label}
-      </dt>
-      <dd className="mt-3 editable-display text-xl font-medium tracking-[-0.02em] text-[var(--tk-text)]">{value}</dd>
-    </div>
-  )
-}
 
 function TrustRow({ icon: Icon, label, note }: { icon: typeof CheckCircle2; label: string; note: string }) {
   return (
@@ -319,19 +311,23 @@ function RelatedBookmarkCard({ post }: { post: SitePost }) {
   const image = getImages(post)[0]
   const domain = cleanDomain(getField(post, ['website', 'url', 'link']))
   return (
-    <Link href={href} className="group flex h-full flex-col overflow-hidden rounded-[var(--tk-radius)] border border-[var(--tk-line)] bg-[var(--tk-surface)] transition duration-500 hover:-translate-y-[3px]">
+    <Link href={href} className="group flex h-full flex-col overflow-hidden rounded-[var(--tk-radius)] border border-[var(--tk-line)] bg-[var(--tk-surface)] transition duration-500 hover:-translate-y-[3px] hover:border-[var(--tk-accent)] hover:shadow-[0_6px_24px_rgba(24,19,18,0.08)]">
       {image ? (
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--tk-raised)]">
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-[var(--tk-raised)]">
           <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
         </div>
       ) : (
-        <div className="flex items-center justify-center border-b border-[var(--tk-line)] p-6">
-          <FolderOpen className="h-6 w-6 text-[var(--tk-muted)]" />
+        <div className="flex aspect-[16/9] items-center justify-center bg-[var(--tk-raised)]">
+          <FolderOpen className="h-7 w-7 text-[var(--tk-muted)] opacity-50" />
         </div>
       )}
       <div className="flex flex-1 flex-col p-5">
         <h3 className="editable-display line-clamp-2 text-base font-medium leading-snug tracking-[-0.01em]">{post.title}</h3>
-        {domain ? <p className="mt-2 text-xs font-medium text-[var(--tk-muted)]">{domain}</p> : null}
+        {domain ? (
+          <span className="mt-3 inline-flex items-center gap-1.5 self-start rounded-full border border-[var(--tk-line)] bg-[var(--tk-raised)] px-2.5 py-1 text-[11px] font-medium text-[var(--tk-muted)]">
+            <Globe className="h-3 w-3 text-[var(--tk-accent)]" /> {domain}
+          </span>
+        ) : null}
       </div>
     </Link>
   )
@@ -348,7 +344,7 @@ function ProfileDetail({ post }: { post: SitePost }) {
   const avatar = images[0]
   const role = getField(post, ['role', 'designation', 'title', 'company'])
   const location = getField(post, ['location', 'address', 'city', 'country'])
-  const bio = leadText(post) || stripHtml(getBody(post)).slice(0, 240)
+  const bio = leadText(post) || stripHtml(getBody(post))
   const website = getField(post, ['website', 'url'])
   const email = getField(post, ['email'])
   const phone = getField(post, ['phone', 'telephone', 'mobile'])
@@ -420,16 +416,6 @@ function ProfileDetail({ post }: { post: SitePost }) {
               </EditableReveal>
             ) : null}
 
-            {/* Their content */}
-            <EditableReveal index={2}>
-              <div>
-                <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-[var(--tk-accent)]">Their content</p>
-                <h2 className="mt-4 editable-display text-3xl font-medium tracking-[-0.02em]">What they've been adding.</h2>
-                <div className="mt-8">
-                  <BodyContent post={post} />
-                </div>
-              </div>
-            </EditableReveal>
           </article>
 
           {/* Identity info sidebar (no related-profiles strip) */}
